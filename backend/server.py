@@ -49,7 +49,7 @@ db = client[os.environ['DB_NAME']]
 
 # ---------- App ----------
 app = FastAPI()
-api_router = APIRouter(prefix="/api")
+api_router = APIRouter()
 
 
 # ---------- JWT helpers ----------
@@ -568,6 +568,8 @@ async def startup():
     await get_portfolio_doc()
 
 
+app.include_router(api_router, prefix="/api/api")
+app.include_router(api_router, prefix="/api")
 app.include_router(api_router)
 
 app.add_middleware(
