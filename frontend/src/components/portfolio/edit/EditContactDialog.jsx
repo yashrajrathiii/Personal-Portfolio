@@ -33,8 +33,9 @@ export default function EditContactDialog({ open, onOpenChange, contact }) {
       <div className="space-y-4">
         {[
           ["email", "Email"],
+          ["phone", "Phone"],
           ["linkedin", "LinkedIn URL"],
-          ["twitter", "Twitter URL"],
+          ["github", "GitHub URL"],
           ["location", "Location"],
         ].map(([k, label]) => (
           <div key={k} className="space-y-2">

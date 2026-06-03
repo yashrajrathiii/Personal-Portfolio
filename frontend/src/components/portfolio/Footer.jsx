@@ -9,7 +9,7 @@ export default function Footer({ onOpenLogin }) {
             YRR<span className="text-klein">.</span>
           </div>
           <p className="mt-2 font-mono text-[11px] tracking-[0.18em] uppercase text-neutral-500">
-            Product Manager · Bengaluru
+            AI Product Manager · Raipur
           </p>
         </div>
         <div className="text-sm text-neutral-500 font-mono tracking-wider">

@@ -82,22 +82,22 @@ class LoginRequest(BaseModel):
 
 
 class HeroSection(BaseModel):
-    overline: str = "PRODUCT MANAGER @ RESHUFFLE"
+    overline: str = "AI PRODUCT MANAGER @ RESHUFFLE"
     name: str = "YASH RAJ RATHI"
-    hook: str = "I build products that turn ambiguity into traction."
-    tagline: str = "Currently scaling Reshuffle — a workplace where culture, hiring, and execution finally speak the same language."
-    location: str = "Bengaluru, India"
-    available: str = "Open to Senior PM roles · 2026"
+    hook: str = "I ship AI-native SaaS products from problem to production."
+    tagline: str = "Currently owning end-to-end roadmaps for live B2B SaaS platforms at Reshuffle — turning agentic AI, RAG pipelines, and clean PRDs into measurable business impact."
+    location: str = "Raipur, Chhattisgarh"
+    available: str = "Open to Product roles · 2026"
 
 
 class AboutSection(BaseModel):
     label: str = "THE MINDSET"
     paragraphs: List[str] = [
-        "I'm a product manager who lives in the space between a messy user problem and a clear, shippable bet. I obsess about the 'why' before the 'what', and I'm allergic to roadmaps that confuse motion with progress.",
-        "At Reshuffle, I lead 0→1 product bets that compound: faster hiring loops, sharper internal tools, and surfaces that make the right action the obvious action. My playbook is research-led, metric-honest, and design-respectful.",
-        "I think in problem statements, narrate in stories, and ship in increments. If a feature can't be drawn on a napkin, it's not ready for engineering.",
+        "I'm an AI Product Manager who lives in the space between a messy user problem and a clear, shippable bet. I think boldly about long-term answers, talk to users instead of assuming, and ground every decision in real usage data.",
+        "At Reshuffle I own 2 production B2B SaaS platforms end-to-end — writing clean PRDs, user stories and flows; running A/B-style experiments; and shepherding features from ideation to launch with engineering, design, and analytics.",
+        "I obsess about quality at every touchpoint — defining acceptance criteria, personally reviewing pre-release, and refusing to ship anything that doesn't meet the brief. If a feature can't be drawn on a napkin, it's not ready for engineering.",
     ]
-    highlights: List[str] = ["Research-led", "0→1 thinking", "Design-respectful", "Metric-honest"]
+    highlights: List[str] = ["Research-led", "0→1 thinking", "Agentic-AI native", "Metric-honest"]
 
 
 class SkillGroup(BaseModel):
@@ -107,18 +107,19 @@ class SkillGroup(BaseModel):
 
 class SkillsSection(BaseModel):
     groups: List[SkillGroup] = [
-        SkillGroup(category="Product Craft", items=["Discovery", "Roadmapping", "Prioritization", "JTBD", "User Research", "A/B Testing"]),
-        SkillGroup(category="Execution", items=["Agile / Scrum", "Sprint Planning", "PRDs", "Stakeholder Alignment", "Release Mgmt"]),
-        SkillGroup(category="Analytics", items=["SQL", "Mixpanel", "Amplitude", "GA4", "Looker", "Excel Models"]),
-        SkillGroup(category="Design & Build", items=["Figma", "Notion", "Linear", "Whimsical", "Webflow", "Prompting LLMs"]),
+        SkillGroup(category="Product Craft", items=["PRD Authoring", "User Stories", "Roadmap Planning", "Feature Prioritization", "MVP Definition", "GTM Strategy", "User Research", "A/B Testing", "KPI Tracking"]),
+        SkillGroup(category="AI & Agentic", items=["LLMs", "RAG Pipelines", "Agentic AI Design", "Prompt Engineering", "OpenAI", "Anthropic", "Groq"]),
+        SkillGroup(category="Build & Ship", items=["n8n", "Supabase", "Lovable", "Figma", "Netlify", "AWS", "REST APIs", "Webhooks", "OAuth", "Git"]),
+        SkillGroup(category="Ops & Soft", items=["Agile / Scrum", "Jira", "Notion", "Miro", "Stakeholder Mgmt", "Cross-functional", "Structured Comms", "Ownership"]),
     ]
 
 
 class ContactSection(BaseModel):
     email: str = "rathiyash12@gmail.com"
-    linkedin: str = "https://linkedin.com/in/yashrajrathi"
-    twitter: str = "https://x.com/yashrajrathi"
-    location: str = "Bengaluru, India"
+    linkedin: str = "https://www.linkedin.com/in/yash-raj-rathi/"
+    github: str = "https://github.com/yashrajrathiii"
+    phone: str = "+91 7024704449"
+    location: str = "Raipur, Chhattisgarh"
     cta: str = "Have a problem worth solving? Let's talk."
 
 
@@ -155,35 +156,34 @@ class Portfolio(BaseModel):
 def default_experience() -> List[Experience]:
     return [
         Experience(
-            role="Product Manager",
+            role="AI Product Manager",
             company="Reshuffle",
-            duration="2024 — Present",
-            location="Bengaluru",
+            duration="Jan 2026 — Present",
+            location="Raipur, India",
             bullets=[
-                "Own the candidate-experience surface from outreach → offer; lifted application completion by 38%.",
-                "Built the internal interview-ops tool that cut recruiter cycle time from 11 days to 4.",
-                "Run weekly product reviews with founders; translated qualitative insights into 6 shipped bets in two quarters.",
+                "Own end-to-end product roadmaps for 2 production-grade AI SaaS platforms — defining long-term product bets, talking to users to derive deep insights, and grounding every decision in real usage data.",
+                "Write clean PRDs, user stories and user flows for every feature; run A/B-style experiments on workflows; collaborate with design, engineering and analytics to ship from ideation to launch.",
+                "Maintain a high quality bar at every touchpoint — personally reviewing features pre-release, defining acceptance criteria, and ensuring delivered solutions meet the brief before sign-off.",
             ],
         ),
         Experience(
-            role="Associate Product Manager",
-            company="Prev Co.",
-            duration="2022 — 2024",
-            location="Remote",
+            role="AI Product Manager Intern",
+            company="Vidz.ai",
+            duration="Nov 2025 — Dec 2025",
+            location="Bangalore, India",
             bullets=[
-                "Led a payments reconciliation revamp that recovered ₹2.4Cr in stuck settlements per quarter.",
-                "Set up the first product analytics stack (Mixpanel + dbt); funnel visibility went from 30% to 95%.",
-                "Mentored two interns into APM roles.",
+                "Led product discovery and delivery for an AI-powered insurance platform — conducted user research with 500+ agents/brokers, authored PRD and user stories, designed 12 Figma wireframes, and delivered cross-functional execution across 8+ product workflows.",
+                "Conducted competitive benchmarking across 20+ platforms; executed GTM strategy through 5+ stakeholder presentations — translating market insights into prioritised product decisions tracked via post-launch KPIs.",
             ],
         ),
         Experience(
-            role="Product Intern",
-            company="Earlier",
-            duration="2021 — 2022",
-            location="Hybrid",
+            role="Business Development Associate",
+            company="PlanetSpark",
+            duration="Jan 2025 — Feb 2025",
+            location="Gurgaon, India",
             bullets=[
-                "Shipped the onboarding redesign that lifted D1 retention by 19%.",
-                "Ran the first 30 user interviews that informed the company's 2022 OKRs.",
+                "Engaged 2,000+ customers to deeply understand their problems and motivations — converted 15% of trial users to paying customers by iterating on value delivery based on real user feedback.",
+                "Handled objections across 500+ calls using CRM tools in a high-performance sales environment.",
             ],
         ),
     ]
@@ -192,44 +192,34 @@ def default_experience() -> List[Experience]:
 def default_projects() -> List[Project]:
     return [
         Project(
-            title="Cycle Time, Cut in Half",
-            summary="Redesigned Reshuffle's recruiter workflow around a single 'next-best-action' surface. Eliminated 7 redundant clicks per candidate.",
-            impact="-64% time-to-offer · +38% application completion",
-            tags=["0→1", "Internal Tools", "Workflow Design"],
+            title="DispatchOps",
+            summary="Currently building — an internal-ops tool that turns chaotic dispatch workflows into a single, observable timeline. Authoring the PRD, designing the flows in Figma, and shipping in Lovable + Supabase as I go.",
+            impact="In active development · MVP target Q1 2026",
+            tags=["0→1", "Internal Tools", "Lovable", "Supabase", "Workflow"],
             image_url="https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxkYXNoYm9hcmQlMjBVSSUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwY2xlYW58ZW58MHx8fHwxNzgwNDc5ODk2fDA&ixlib=rb-4.1.0&q=85",
-            role="Lead PM",
-            year="2025",
+            role="Solo PM + Builder",
+            year="2026",
             span="lg",
         ),
         Project(
-            title="Signal over Noise",
-            summary="Built an analytics layer that turned 14 disconnected dashboards into one weekly executive narrative.",
-            impact="14 → 1 dashboards · 95% funnel visibility",
-            tags=["Analytics", "Internal", "Data Storytelling"],
+            title="RECRUIT-AI",
+            summary="A two-sided marketplace connecting job seekers to roles. Owned roadmap end-to-end — user research, PRD, user stories, process flows, and 12 Figma wireframes. Deployed on Netlify with Supabase auth.",
+            impact="500+ users · 90% match accuracy · 2s response · 15+ KPIs tracked",
+            tags=["Lovable", "n8n", "Supabase", "Marketplace", "RAG"],
             image_url="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwzfHxkYXNoYm9hcmQlMjBVSSUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwY2xlYW58ZW58MHx8fHwxNzgwNDc5ODk2fDA&ixlib=rb-4.1.0&q=85",
-            role="PM + Analyst",
-            year="2024",
+            role="Lead PM",
+            year="2025",
             span="md",
         ),
         Project(
-            title="The Quiet Onboarding",
-            summary="Stripped the new-user flow from 9 steps to 3. Replaced the tutorial with progressive disclosure inside the product.",
-            impact="+19% D1 retention",
-            tags=["Onboarding", "UX", "Activation"],
+            title="SubSentry",
+            summary="Spotted a real pain point — subscription overspend — turned it into a product hypothesis, shipped an MVP, and validated through post-launch KPI analysis.",
+            impact="95% alert automation · 25% overspend reduction · 1,000+ records · 99.9% uptime",
+            tags=["n8n", "Supabase", "React", "Consumer", "Automation"],
             image_url="",
-            role="APM",
-            year="2023",
+            role="Solo PM",
+            year="2025",
             span="md",
-        ),
-        Project(
-            title="Recovering ₹2.4Cr a Quarter",
-            summary="Reconciliation tooling that surfaced settlement breaks to ops in real time. From spreadsheets to a single source of truth.",
-            impact="₹2.4Cr/quarter recovered · 4× faster ops",
-            tags=["Payments", "Internal Tools", "B2B"],
-            image_url="",
-            role="APM",
-            year="2023",
-            span="sm",
         ),
     ]
 

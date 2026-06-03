@@ -95,8 +95,8 @@ export default function Projects({ projects }) {
               data-testid="projects-heading"
               className="mt-4 font-display font-black uppercase text-5xl md:text-6xl lg:text-7xl tracking-tightest leading-none"
             >
-              Selected<br />
-              <span className="text-klein">Case Studies</span>
+              My<br />
+              <span className="text-klein">Projects</span>
             </h2>
           </div>
           {isAdmin && (
