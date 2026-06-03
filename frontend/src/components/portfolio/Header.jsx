@@ -63,6 +63,15 @@ export default function Header({ onOpenLogin }) {
                 <span className="w-1.5 h-1.5 bg-klein rounded-full animate-pulse" /> Edit Mode
               </span>
               <Button
+                data-testid="header-analytics-button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setAnalyticsOpen(true)}
+                className="rounded-none font-mono text-[11px] tracking-[0.18em] uppercase hover:text-klein"
+              >
+                <BarChart3 className="w-3.5 h-3.5 mr-1.5" /> Stats
+              </Button>
+              <Button
                 data-testid="logout-button"
                 variant="ghost"
                 size="sm"
