@@ -22,7 +22,27 @@ MAX_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 # ---------- MongoDB ----------
-mongo_url = os.environ['MONGO_URL']
+import urllib.parse
+
+def clean_mongo_url(url: str) -> str:
+    if not url:
+        return url
+    try:
+        if "://" in url:
+            scheme, rest = url.split("://", 1)
+            if "@" in rest:
+                creds, host = rest.rsplit("@", 1)
+                if ":" in creds:
+                    user, password = creds.split(":", 1)
+                    # Unquote first to avoid double encoding, then quote
+                    quoted_user = urllib.parse.quote_plus(urllib.parse.unquote_plus(user))
+                    quoted_password = urllib.parse.quote_plus(urllib.parse.unquote_plus(password))
+                    return f"{scheme}://{quoted_user}:{quoted_password}@{host}"
+    except Exception:
+        pass
+    return url
+
+mongo_url = clean_mongo_url(os.environ['MONGO_URL'])
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
