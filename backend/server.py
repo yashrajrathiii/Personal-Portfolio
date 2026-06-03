@@ -13,13 +13,10 @@ from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Any
 
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, UploadFile, File
-from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr
 
-UPLOAD_DIR = ROOT_DIR / "uploads"
-UPLOAD_DIR.mkdir(exist_ok=True)
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/jpg", "image/png", "image/webp"}
 MAX_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 
@@ -401,9 +398,29 @@ async def upload_image(file: UploadFile = File(...), current_user: dict = Depend
     ext_map = {"image/jpeg": "jpg", "image/jpg": "jpg", "image/png": "png", "image/webp": "webp"}
     ext = ext_map.get(file.content_type, "jpg")
     filename = f"{uuid.uuid4().hex}.{ext}"
-    target = UPLOAD_DIR / filename
-    target.write_bytes(contents)
+    
+    # Store image in MongoDB as base64-encoded string
+    import base64
+    encoded = base64.b64encode(contents).decode("utf-8")
+    await db.uploads.insert_one({
+        "filename": filename,
+        "content_type": file.content_type,
+        "data": encoded,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
     return {"url": f"/api/uploads/files/{filename}", "filename": filename, "size": len(contents)}
+
+
+@api_router.get("/uploads/files/{filename}")
+async def serve_uploaded_file(filename: str):
+    from fastapi.responses import Response
+    import base64
+    upload = await db.uploads.find_one({"filename": filename})
+    if not upload:
+        raise HTTPException(status_code=404, detail="File not found")
+    data = base64.b64decode(upload["data"])
+    headers = {"Cache-Control": "public, max-age=31536000, immutable"}
+    return Response(content=data, media_type=upload["content_type"], headers=headers)
 
 
 # ---------- Analytics ----------
@@ -493,7 +510,7 @@ async def root():
 
 
 # ---------- Static uploads ----------
-app.mount("/api/uploads/files", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+# Serves uploads directly from MongoDB via endpoint defined above
 
 
 # ---------- Startup ----------
@@ -503,6 +520,7 @@ async def startup():
     await db.portfolio.create_index("id", unique=True)
     await db.visits.create_index("ts")
     await db.visits.create_index("visitor_id")
+    await db.uploads.create_index("filename", unique=True)
 
     admin_email = os.environ["ADMIN_EMAIL"].strip().lower()
     admin_password = os.environ["ADMIN_PASSWORD"]
