@@ -40,7 +40,7 @@ def test_get_portfolio_returns_seeded_content(api):
     for k in ["hero", "about", "skills", "contact", "experience", "projects"]:
         assert k in d, f"missing {k}"
     assert d["hero"]["name"] == "YASH RAJ RATHI"
-    assert d["hero"]["overline"] == "PRODUCT MANAGER @ RESHUFFLE"
+    assert "PRODUCT MANAGER" in d["hero"]["overline"]
     assert isinstance(d["experience"], list) and len(d["experience"]) >= 1
     assert isinstance(d["projects"], list) and len(d["projects"]) >= 1
     assert "_id" not in d

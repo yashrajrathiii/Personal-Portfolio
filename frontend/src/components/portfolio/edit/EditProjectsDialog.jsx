@@ -8,6 +8,7 @@ import { usePortfolio } from "@/contexts/PortfolioContext";
 import { formatApiErrorDetail } from "@/lib/api";
 import { EditShell, inputClasses, submitClasses, ghostBtnClasses } from "./_shared";
 import { Trash2 } from "lucide-react";
+import ImageUploadField from "../ImageUploadField";
 
 const empty = { title: "", summary: "", impact: "", tags: [], image_url: "", role: "", year: "", span: "md" };
 
@@ -131,13 +132,11 @@ export default function EditProjectsDialog({ open, onOpenChange, projects, editi
           </div>
         </div>
         <div className="space-y-2">
-          <Label className="font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500">Image URL</Label>
-          <Input
-            data-testid="edit-proj-image"
-            value={form.image_url || ""}
-            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-            placeholder="https://..."
-            className={inputClasses()}
+          <Label className="font-mono text-[10px] tracking-[0.2em] uppercase text-neutral-500">Cover Image</Label>
+          <ImageUploadField
+            value={form.image_url}
+            onChange={(url) => setForm({ ...form, image_url: url })}
+            testid="edit-proj-image"
           />
         </div>
         <div className="space-y-2">

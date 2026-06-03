@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, ArrowUpRight } from "lucide-react";
+import { LogIn, LogOut, ArrowUpRight, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
+import AnalyticsDialog from "./AnalyticsDialog";
 
 export default function Header({ onOpenLogin }) {
   const { isAdmin, logout, user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -93,6 +95,7 @@ export default function Header({ onOpenLogin }) {
           </Button>
         </div>
       </div>
+      <AnalyticsDialog open={analyticsOpen} onOpenChange={setAnalyticsOpen} />
     </header>
   );
 }

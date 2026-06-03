@@ -4,6 +4,14 @@ import EditProjectsDialog from "./edit/EditProjectsDialog";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const resolveImg = (url) => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  if (url.startsWith("/")) return `${BACKEND_URL}${url}`;
+  return url;
+};
+
 const spanClasses = {
   sm: "md:col-span-4",
   md: "md:col-span-6",
@@ -21,7 +29,7 @@ function ProjectCard({ p, onEdit }) {
       {p.image_url ? (
         <div className="aspect-[16/10] overflow-hidden bg-neutral-100 border-b border-black/10">
           <img
-            src={p.image_url}
+            src={resolveImg(p.image_url)}
             alt={p.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

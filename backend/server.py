@@ -12,10 +12,16 @@ import jwt
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Any
 
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, UploadFile, File
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr
+
+UPLOAD_DIR = ROOT_DIR / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/jpg", "image/png", "image/webp"}
+MAX_UPLOAD_SIZE = 5 * 1024 * 1024  # 5 MB
 
 
 # ---------- MongoDB ----------
@@ -384,9 +390,110 @@ async def delete_project(proj_id: str, current_user: dict = Depends(get_current_
     return await get_portfolio_doc()
 
 
+# ---------- Image Upload ----------
+@api_router.post("/uploads/image")
+async def upload_image(file: UploadFile = File(...), current_user: dict = Depends(get_current_admin)):
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(status_code=400, detail="Only JPEG, PNG and WEBP images are allowed")
+    contents = await file.read()
+    if len(contents) > MAX_UPLOAD_SIZE:
+        raise HTTPException(status_code=400, detail="Image must be under 5 MB")
+    ext_map = {"image/jpeg": "jpg", "image/jpg": "jpg", "image/png": "png", "image/webp": "webp"}
+    ext = ext_map.get(file.content_type, "jpg")
+    filename = f"{uuid.uuid4().hex}.{ext}"
+    target = UPLOAD_DIR / filename
+    target.write_bytes(contents)
+    return {"url": f"/api/uploads/files/{filename}", "filename": filename, "size": len(contents)}
+
+
+# ---------- Analytics ----------
+class VisitPayload(BaseModel):
+    path: str = "/"
+    referrer: Optional[str] = ""
+    user_agent: Optional[str] = ""
+    screen: Optional[str] = ""
+    language: Optional[str] = ""
+    visitor_id: Optional[str] = ""  # client-generated stable id
+
+
+def _client_ip(request: Request) -> str:
+    fwd = request.headers.get("x-forwarded-for", "")
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+@api_router.post("/analytics/visit")
+async def log_visit(payload: VisitPayload, request: Request):
+    doc = {
+        "id": str(uuid.uuid4()),
+        "path": payload.path or "/",
+        "referrer": (payload.referrer or "")[:300],
+        "user_agent": (payload.user_agent or "")[:400],
+        "screen": payload.screen or "",
+        "language": payload.language or "",
+        "visitor_id": payload.visitor_id or "",
+        "ip": _client_ip(request),
+        "ts": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.visits.insert_one(doc)
+    return {"ok": True}
+
+
+@api_router.get("/analytics/stats")
+async def analytics_stats(current_user: dict = Depends(get_current_admin)):
+    now = datetime.now(timezone.utc)
+    day_ago = (now - timedelta(days=1)).isoformat()
+    week_ago = (now - timedelta(days=7)).isoformat()
+    month_ago = (now - timedelta(days=30)).isoformat()
+
+    total = await db.visits.count_documents({})
+    last_day = await db.visits.count_documents({"ts": {"$gte": day_ago}})
+    last_week = await db.visits.count_documents({"ts": {"$gte": week_ago}})
+    last_month = await db.visits.count_documents({"ts": {"$gte": month_ago}})
+
+    unique_visitors = len(await db.visits.distinct("visitor_id", {"visitor_id": {"$ne": ""}}))
+
+    # Top referrers
+    pipeline_ref = [
+        {"$match": {"referrer": {"$ne": ""}}},
+        {"$group": {"_id": "$referrer", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 8},
+    ]
+    top_refs = [{"referrer": r["_id"], "count": r["count"]} async for r in db.visits.aggregate(pipeline_ref)]
+
+    # Daily visits last 14 days
+    pipeline_daily = [
+        {"$match": {"ts": {"$gte": (now - timedelta(days=14)).isoformat()}}},
+        {"$project": {"day": {"$substr": ["$ts", 0, 10]}}},
+        {"$group": {"_id": "$day", "count": {"$sum": 1}}},
+        {"$sort": {"_id": 1}},
+    ]
+    daily = [{"day": r["_id"], "count": r["count"]} async for r in db.visits.aggregate(pipeline_daily)]
+
+    recent_cursor = db.visits.find({}, {"_id": 0}).sort("ts", -1).limit(20)
+    recent = await recent_cursor.to_list(20)
+
+    return {
+        "total": total,
+        "last_day": last_day,
+        "last_week": last_week,
+        "last_month": last_month,
+        "unique_visitors": unique_visitors,
+        "top_referrers": top_refs,
+        "daily": daily,
+        "recent": recent,
+    }
+
+
 @api_router.get("/")
 async def root():
     return {"message": "Portfolio API"}
+
+
+# ---------- Static uploads ----------
+app.mount("/api/uploads/files", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 
 # ---------- Startup ----------
@@ -394,6 +501,8 @@ async def root():
 async def startup():
     await db.users.create_index("email", unique=True)
     await db.portfolio.create_index("id", unique=True)
+    await db.visits.create_index("ts")
+    await db.visits.create_index("visitor_id")
 
     admin_email = os.environ["ADMIN_EMAIL"].strip().lower()
     admin_password = os.environ["ADMIN_PASSWORD"]

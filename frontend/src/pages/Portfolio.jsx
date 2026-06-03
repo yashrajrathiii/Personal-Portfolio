@@ -10,16 +10,44 @@ import Skills from "@/components/portfolio/Skills";
 import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
 import AdminLoginDialog from "@/components/portfolio/AdminLoginDialog";
+import api from "@/lib/api";
 import { useState } from "react";
 
+function getOrCreateVisitorId() {
+  let id = localStorage.getItem("yrr_visitor_id");
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : `v_${Date.now()}_${Math.random().toString(36).slice(2)}`);
+    localStorage.setItem("yrr_visitor_id", id);
+  }
+  return id;
+}
+
 export default function Portfolio({ openAdmin = false }) {
-  const { checking } = useAuth();
+  const { checking, isAdmin } = useAuth();
   const { data, loading } = usePortfolio();
   const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     if (openAdmin) setLoginOpen(true);
   }, [openAdmin]);
+
+  // Log visit once per session (skip if admin)
+  useEffect(() => {
+    if (checking) return;
+    if (isAdmin) return;
+    if (sessionStorage.getItem("yrr_visit_logged")) return;
+    sessionStorage.setItem("yrr_visit_logged", "1");
+    api
+      .post("/analytics/visit", {
+        path: window.location.pathname,
+        referrer: document.referrer || "",
+        user_agent: navigator.userAgent || "",
+        screen: `${window.screen.width}x${window.screen.height}`,
+        language: navigator.language || "",
+        visitor_id: getOrCreateVisitorId(),
+      })
+      .catch(() => {});
+  }, [checking, isAdmin]);
 
   if (checking || loading || !data) {
     return (
