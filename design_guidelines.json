@@ -1,0 +1,121 @@
+{
+  "theme_and_archetype": {
+    "domain": "Portfolio / Personal Brand",
+    "theme": "Light",
+    "archetype": "4 (Swiss & High-Contrast)",
+    "rationale": "A Product Manager's portfolio needs to convey authority, structural clarity, and objective truth. The Swiss Brutalist aesthetic achieves this through massive whitespace, crisp typographic hierarchy, and extreme restraint. Instead of generic SaaS templates, we use a stark editorial layout that feels like a premium magazine, catching a recruiter's eye immediately."
+  },
+  "typography": {
+    "primary_heading_font": "Cabinet Grotesk",
+    "secondary_body_font": "IBM Plex Sans",
+    "font_install_instructions": "Import Cabinet Grotesk via Fontshare URL in index.css: `@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400,900&display=swap');`. Import IBM Plex Sans via Google Fonts.",
+    "scales": {
+      "h1": "text-5xl sm:text-6xl lg:text-8xl tracking-tighter leading-none font-black uppercase",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight font-bold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-bold",
+      "body": "text-base lg:text-lg leading-relaxed text-neutral-600",
+      "overline": "text-xs tracking-[0.2em] uppercase font-bold text-accent"
+    },
+    "rules": [
+      "No Inter or Roboto for headings. Ever.",
+      "Headings must use tight letter spacing (tracking-tight or tighter).",
+      "Huge contrast between heading weights (Black) and body weights (Regular)."
+    ]
+  },
+  "color_palette": {
+    "background": {
+      "primary": "#FDFDFD",
+      "secondary": "#F3F4F6"
+    },
+    "text": {
+      "primary": "#0A0A0A",
+      "secondary": "#52525B",
+      "inverse": "#FFFFFF"
+    },
+    "accent": {
+      "primary": "#002FA7",
+      "hover": "#00227A",
+      "light": "rgba(0, 47, 167, 0.1)"
+    },
+    "borders": {
+      "default": "#E5E7EB",
+      "focus": "#002FA7"
+    },
+    "rules": [
+      "Use International Klein Blue (#002FA7) as the singular bold accent color. Do not overuse it. It should only highlight primary CTAs, active states, and critical data points.",
+      "Never use pure black (#000000). Use #0A0A0A.",
+      "95% of the UI should be monochrome. Color exists only to guide action."
+    ]
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing Philosophy. Use 2-3x more spacing than typical designs.",
+    "container_padding": "py-24 px-6 md:px-12 lg:px-24",
+    "grid_system": {
+      "name": "Tetris Grid (Mode A)",
+      "rules": "For case studies and projects, use an asymmetric grid. Base grid: grid-cols-1 md:grid-cols-12 gap-8 to gap-12. Do not fill 100% of the grid perfectly. Leave empty cells for offset alignment."
+    }
+  },
+  "surface_styles": {
+    "header": {
+      "type": "Crystal Glass",
+      "classes": "fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl border-b border-black/5 shadow-sm"
+    },
+    "cards": {
+      "type": "Technical Grid / Solid",
+      "classes": "bg-white border border-neutral-200 rounded-none hover:-translate-y-1 transition-transform duration-300",
+      "note": "Use sharp edges (rounded-none or max rounded-sm). No soft drop shadows. Rely on 1px borders."
+    }
+  },
+  "components_strategy": {
+    "hero": {
+      "layout": "Asymmetric split or massive left-aligned typography. Big hook: 'I BUILD PRODUCTS THAT MATTER.'",
+      "elements": "Giant H1 name, subtle overline for role ('PRODUCT MANAGER @ RESHUFFLE'), and a magnetic CTA button."
+    },
+    "about": {
+      "layout": "Two-column. Left column: 'THE MINDSET' (sticky). Right column: Paragraphs of text with highlighted keywords."
+    },
+    "projects": {
+      "layout": "Bento/Tetris grid. Mix tall images (col-span-4 row-span-2) with wide text blocks (col-span-8). Case study cards should feel like editorial spreads, not standard SaaS cards."
+    },
+    "experience": {
+      "layout": "Minimalist timeline. Left aligned. Border-l-2 with accent color on hover. Role, company, duration, and bullet points."
+    },
+    "admin_editable_state": {
+      "concept": "Inline Editing Overlay",
+      "implementation": "When user is authenticated, render a 'Pencil' icon button (Lucide) in the top right corner of every editable section/card. Clicking it opens a Shadcn Dialog containing a Shadcn Form to update the content. Use Shadcn Toasts for success states.",
+      "auth_ui": "A hidden route (e.g., /admin) or a lock icon in the footer opens a clean Shadcn Dialog for password/login."
+    }
+  },
+  "motion": {
+    "philosophy": "Functional and crisp. No bouncy or slow fades.",
+    "hover": "Instant color shifts, sharp 1px translations (e:-translate-y-1).",
+    "scroll": "Staggered fade-in-up for project cards (framer-motion or simple CSS intersection observer classes)."
+  },
+  "image_urls": {
+    "hero_abstract": {
+      "url": "https://images.unsplash.com/photo-1707248985080-954ad8466006?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODd8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYXJjaGl0ZWN0dXJlJTIwYWJzdHJhY3QlMjB3aGl0ZXxlbnwwfHx8fDE3ODA0Nzk4OTZ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Minimalist white wavy architecture, useful for an abstract background texture in the Hero or About section."
+    },
+    "profile_placeholder": {
+      "url": "https://images.unsplash.com/photo-1543132220-3ec99c6094dc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBtYWxlJTIwcG9ydHJhaXQlMjBtaW5pbWFsaXN0JTIwc3R1ZGlvfGVufDB8fHx8MTc4MDQ3OTg5Nnww&ixlib=rb-4.1.0&q=85",
+      "description": "Professional male portrait to act as a placeholder for Yash Raj Rathi's headshot."
+    },
+    "project_1": {
+      "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxkYXNoYm9hcmQlMjBVSSUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwY2xlYW58ZW58MHx8fHwxNzgwNDc5ODk2fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Dashboard UI data visualization for Case Study 1."
+    },
+    "project_2": {
+      "url": "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwzfHxkYXNoYm9hcmQlMjBVSSUyMGRhdGElMjB2aXN1YWxpemF0aW9uJTIwY2xlYW58ZW58MHx8fHwxNzgwNDc5ODk2fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Clean monitor screen graph for Case Study 2."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Build a single-page React application with distinct sections: Hero, About, Experience, Projects, Skills, Contact.",
+    "State Management for Content: Store the portfolio content in a central state or mock JSON context so it can be 'edited'. When in admin mode, mutating the state should reflect immediately.",
+    "Admin Toggle: Create a mock login flow. Once logged in as Admin, map over editable sections and inject an 'Edit' button (use lucide-react icons) absolutely positioned in the corner of the content block.",
+    "Use Shadcn UI for: Dialog (Modals for editing), Input, Textarea, Button, Label, Toasts (for success messages when saving edits).",
+    "Avoid Shadcn Cards for the main portfolio layout to prevent the generic SaaS look. Use raw HTML/Tailwind to implement the Tetris grid.",
+    "Add 'data-testid' attributes to all interactive elements, specifically the edit buttons, form inputs, and submit buttons.",
+    "Ensure all contrast ratios pass WCAG AA standards. Use pure HTML/Tailwind for the heavy typographic layouts."
+  ]
+}
